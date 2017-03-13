@@ -30,8 +30,9 @@ public class FileViewerHandler : IHttpHandler {
                         context.Response.End();
                 }
                 if(info.fileFormate.Equals("image/gif")||info.fileFormate.Equals("image/jpeg")||info.fileFormate.Equals("image/png")){
-                    context.Response.Write("{\"durl\":\"http://" + ur + "/Handler/FileViewerHelperHandler.ashx?fil=" + info.saveName + "\"}");
+                    context.Response.Write("{\"durl\":\"http://" + ur + "/imgZoom/viewer.html?fil=" + context.Server.UrlEncode("../Handler/FileViewerHelperHandler.ashx?fil=" + info.saveName) + "\"}");
                     context.Response.End();
+                    
                 }
                 
                 

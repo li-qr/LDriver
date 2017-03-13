@@ -29,7 +29,9 @@ public class FileViewerHelperHandler : IHttpHandler,System.Web.SessionState.IReq
                     "application/msword",
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     "application/vnd.ms-excel",
-                    
+                    "image/gif",
+                    "image/jpeg",
+                    "image/png"
                    // "application/vnd.openxmlformats-officedocument.presentationml.presentation",
                    // "application/vnd.ms-powerpoint"
                 };
@@ -79,6 +81,22 @@ public class FileViewerHelperHandler : IHttpHandler,System.Web.SessionState.IReq
                     Workbook wb = new Workbook(ie);
                     wb.Save(iee, Aspose.Cells.SaveFormat.Html);
                     context.Response.ContentType = "text/html";
+                    //context.Response.AddHeader("Content-Disposition", "attachment; filename=" + info.saveName + ".html");
+                    byte[] mdata = new Byte[1024 * 1024];
+                    iee.Position = 0;
+                    while (iee.Position < iee.Length)
+                    {
+                        int rcount = iee.Read(mdata, 0, mdata.Length);
+                        context.Response.OutputStream.Write(mdata, 0, rcount);
+                    }
+                    context.Response.End();
+                    return;
+                }
+
+                if (info.fileFormate.Equals("image/gif")||info.fileFormate.Equals("image/jpeg")||info.fileFormate.Equals("image/png")) {
+                    ie.Position = 0;
+                    ie.WriteTo(iee);
+                    context.Response.ContentType = info.fileFormate;
                     //context.Response.AddHeader("Content-Disposition", "attachment; filename=" + info.saveName + ".html");
                     byte[] mdata = new Byte[1024 * 1024];
                     iee.Position = 0;

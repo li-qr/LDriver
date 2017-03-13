@@ -29,7 +29,7 @@ public class FileDownloadHandler : IHttpHandler,System.Web.SessionState.IRequire
                 MemoryStream iee = new MemoryStream();
                 using (ZipOutputStream s = new ZipOutputStream(iee))
                 {
-
+                    ZipExtraData
                     s.SetLevel(4);
                   
                         string[] temp = downfilemd5.Split('|');

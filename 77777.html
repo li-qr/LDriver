@@ -212,7 +212,10 @@
         }
         function tem(item) {
             event.stopPropagation();
-            alert(item);
+            $.getJSON('Handler/FileViewerHandler.ashx?fil=' + item, function (url) {
+                window.open(url.durl);
+            });
+
         }
         function nextpage() {
             table.nextpage();

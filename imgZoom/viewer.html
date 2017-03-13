@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>正在查看图片</title>
+	<style type="text/css">
+		.imgZoom{
+			width:300px;
+			cursor: pointer;
+		}
+	</style>
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.drag.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+            
+            var src = $.getUrlParam('fil');
+
+
+            var mask =
+                "<div style = 'position: absolute;width: 100%;z-index: 5555;height: 100%;top: 0;left: 0;background: rgba(0,0,0,0.5);display:none;' id='imgZoomMask'></div>";
+            $("html").append(mask);
+            var windowWidth = $(window).width();
+            var windowHeight = $(window).height();
+            $(window).resize(function () {
+                windowWidth = $(window).width();
+                windowHeight = $(window).height();
+            });
+
+                    $("#imgZoomMask").show();
+                    var img = new Image();
+                    img.src = decodeURI(src);
+                    img.onload = function () {
+                        var dom = "";
+                        var displayWidth = 0;
+                        var displayHeight = 0;
+                        var style = "";
+                        if (img.width > img.height) {
+                            displayWidth = windowWidth / 2;
+                            displayHeight = img.height * displayWidth / img.width;
+                            style = "z-index:6666;position:absolute;top:" +
+                                windowHeight / 2 +
+                                "px;margin-top:-" +
+                                displayHeight / 2 +
+                                "px;left:" +
+                                windowWidth / 2 +
+                                "px;margin-left:-" +
+                                displayWidth / 2 +
+                                "px;cursor:pointer;";
+                            dom = "<img draggable='true' src = '" +
+                                src +
+                                "' width = '50%' style='" +
+                                style +
+                                "' id='imgZoomImg'>";
+                        } else {
+                            displayHeight = windowHeight / 2;
+                            displayWidth = displayHeight * img.width / img.height;
+                            style = "z-index:6666;position:absolute;top:" +
+                                windowHeight / 2 +
+                                "px;margin-top:-" +
+                                displayHeight / 2 +
+                                "px;left:" +
+                                windowWidth / 2 +
+                                "px;margin-left:-" +
+                                displayWidth / 2 +
+                                "px;cursor:pointer;";
+                            dom = "<img draggable='true' src = '" +
+                                src +
+                                "' height = '50%' style=' " +
+                                style +
+                                "' id='imgZoomImg'>";
+                        }
+                        $("body").append(dom);
+                        $("#imgZoomImg").dragging({
+                            move: "both", //拖动方向，x y both
+                            randomPosition: false //初始位置是否随机
+                        });
+
+                    }
+
+
+            $(document).on("mousewheel", function (e, d) {
+                //d 1 上 -1 下
+                if (d === 1) {
+                    var width = $("#imgZoomImg").width();
+                    var height = $("#imgZoomImg").height();
+                    $("#imgZoomImg").css({ "width": width * 1.2, "height": height * 1.2 });
+                }
+                if (d === -1) {
+                    var width = $("#imgZoomImg").width();
+                    var height = $("#imgZoomImg").height();
+                    $("#imgZoomImg").css({ "width": width / 1.2, "height": height / 1.2 });
+                }
+            });
+
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>
